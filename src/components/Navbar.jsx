@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Menu, X, Search, User } from 'lucide-react';
+import { ShoppingBag, Menu, X, Search, User, Sun, Moon } from 'lucide-react';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ isDark, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -15,28 +15,31 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className={`navbar ${isScrolled ? 'scrolled glass-panel' : ''}`}>
+    <header className={`navbar ${isScrolled ? 'scrolled' : ''} ${isDark ? 'navbar-dark' : 'navbar-light'}`}>
       <div className="container navbar-container">
-        <div className="navbar-logo">
+        <div className="navbar-logo hover-magnetic">
           <h1>RADIANT</h1>
         </div>
 
         <nav className={`navbar-links ${isMobileMenuOpen ? 'active' : ''}`}>
-          <a href="#home">Home</a>
-          <a href="#shop">Collection</a>
-          <a href="#about">Philosophy</a>
-          <a href="#journal">Editorial</a>
+          <a href="#home" className="hover-magnetic">Home</a>
+          <a href="#shop" className="hover-magnetic">Archive</a>
+          <a href="#about" className="hover-magnetic">Philosophy</a>
+          <a href="#journal" className="hover-magnetic">Editorial</a>
         </nav>
 
         <div className="navbar-actions">
-          <button className="icon-btn"><Search size={18} strokeWidth={1.5} /></button>
-          <button className="icon-btn"><User size={18} strokeWidth={1.5} /></button>
-          <button className="icon-btn cart-btn">
-            <ShoppingBag size={18} strokeWidth={1.5} />
+          <button className="icon-btn hover-magnetic" onClick={toggleTheme} aria-label="Toggle theme">
+            {isDark ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
+          </button>
+          <button className="icon-btn hover-magnetic"><Search size={20} strokeWidth={1.5} /></button>
+          <button className="icon-btn hover-magnetic"><User size={20} strokeWidth={1.5} /></button>
+          <button className="icon-btn cart-btn hover-magnetic">
+            <ShoppingBag size={20} strokeWidth={1.5} />
             <span className="cart-badge">2</span>
           </button>
           <button 
-            className="mobile-toggle icon-btn" 
+            className="mobile-toggle icon-btn hover-magnetic" 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}

@@ -1,50 +1,81 @@
-import React from 'react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
+import React, { useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import './Hero.css';
 
 const Hero = () => {
-  const [heroRef, heroVisible] = useScrollReveal();
-  const [imgRef, imgVisible] = useScrollReveal({ threshold: 0.2, triggerOnce: false });
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Parallax effect on mouse move
+    const handleMouseMove = (e) => {
+      // Only do parallax if the device supports hover
+      if (!window.matchMedia("(hover: hover)").matches) return;
+      if (!containerRef.current) return;
+      
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 15; // subtle tilt
+      const y = (clientY / window.innerHeight - 0.5) * 15;
+      
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          containerRef.current.style.setProperty('--mouseX', `${x}deg`);
+          containerRef.current.style.setProperty('--mouseY', `${-y}deg`);
+        }
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
-    <section id="home" className="hero">
-      <div className="hero-glow hero-glow-1"></div>
-      <div className="hero-glow hero-glow-2"></div>
+    <section id="home" className="hero" ref={containerRef}>
+      <div className="hero-background-image">
+        <img 
+          src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
+          alt="Dark avant-garde aesthetic" 
+        />
+        <div className="hero-overlay-gradient"></div>
+      </div>
       
-      <div className="container hero-container" ref={heroRef}>
-        <div className={`hero-content reveal ${heroVisible ? 'is-visible' : ''}`}>
-          <div className="hero-subtitle">
+      <div className="container hero-container">
+        <div className="hero-content">
+          <div className="hero-subtitle reveal is-visible" style={{ transitionDelay: '0.2s' }}>
             <span className="line"></span> 
-            <span>The New Era of Luxury</span>
+            <span className="font-display">Rebel Against Ordinary</span>
           </div>
-          <h1 className="hero-title">
-            Mesmerizing. <br />
-            <span className="text-gradient">Undefined Beauty.</span>
+          <h1 className="hero-title reveal is-visible" style={{ transitionDelay: '0.4s' }}>
+            Unapologetic.<br />
+            <span className="font-serif italic-accent">Seduction.</span>
           </h1>
-          <p className="hero-description">
-            Experience the zenith of cosmetic engineering. Deep, rich, and utterly flawless formulas designed to blur the line between reality and perfection.
+          <p className="hero-description reveal is-visible" style={{ transitionDelay: '0.6s' }}>
+            We engineer the darkest, richest pigments. Blur the line between digital perfection and physical reality. Become the anomaly.
           </p>
-          <div className="hero-actions">
-            <button className="btn btn-primary">
-              Enter Collection <ArrowRight size={18} strokeWidth={1.5} />
+          <div className="hero-actions reveal is-visible" style={{ transitionDelay: '0.8s' }}>
+            <button className="btn hover-magnetic">
+              Shop The Abyss <ArrowRight size={18} strokeWidth={2} />
             </button>
           </div>
         </div>
+      </div>
 
-        <div 
-          className={`hero-image-wrapper reveal ${imgVisible ? 'is-visible' : ''}`}
-          ref={imgRef}
-        >
-          <div className="hero-image glass-panel">
-            {/* Extremely reliable Unsplash high-fashion makeup aesthetic */}
-            <img 
-              src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-              alt="High-end beauty aesthetic" 
-            />
-            <div className="img-overlay"></div>
-          </div>
-          <div className="floating-orb orb-1"></div>
+      <div className="scrolling-marquee">
+        <div className="marquee-content font-display">
+          <span>NO APOLOGIES</span>
+          <span>•</span>
+          <span>RAW PIGMENTS</span>
+          <span>•</span>
+          <span>ETHEREAL GLOW</span>
+          <span>•</span>
+          <span>CRUELTY FREE</span>
+          <span>•</span>
+          <span>NO APOLOGIES</span>
+          <span>•</span>
+          <span>RAW PIGMENTS</span>
+          <span>•</span>
+          <span>ETHEREAL GLOW</span>
+          <span>•</span>
+          <span>CRUELTY FREE</span>
         </div>
       </div>
     </section>
